@@ -27,10 +27,7 @@ fn get<Q: ?Sized>(&self, k: &Q) -> Option<&V>
 struct HashMap<K, V, S = RandomState> {
 ```
 
-The `K` parameter is the type of _key_ the `HashMap` uses. So, looking at
-the signature of `get()` again, we can use `get()` when the key implements
-`Borrow<Q>`. That way, we can make a `HashMap` which uses `String` keys,
-but use `&str`s when we’re searching:
+`K` 파라미터는 `HashMap`  이 사용하는 _키_ 입니다. `get()` 의 시그너처를 다시 보면,  키가 `Borrow<Q>` 를 구현했을 때 `get()` 을 사용할 수 있습니다. 이와 같은 방식으로, `String` 을 키로 사용하는 `HashMap` 을 만들지만, 검색할 대는 `&str`을 사용합니다:
 
 ```rust
 use std::collections::HashMap;
@@ -40,6 +37,10 @@ map.insert("Foo".to_string(), 42);
 
 assert_eq!(map.get("Foo"), Some(&42));
 ```
+
+표준 라이브러리는 `impl Borrow<str> for String` 를 갖고 있기 때문 입니다.
+
+대부분의 타입에 대해서, 소유하거나 빌린 타입을 취할 때, `&T` 를 사용하면 충분합니다.
 
 This is because the standard library has `impl Borrow<str> for String`.
 
