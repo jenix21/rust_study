@@ -41,14 +41,9 @@ assert_eq!(map.get("Foo"), Some(&42));
 표준 라이브러리는 `impl Borrow<str> for String` 를 갖고 있기 때문 입니다.
 
 대부분의 타입에 대해서, 소유하거나 빌린 타입을 취할 때, `&T` 를 사용하면 충분합니다.
-
-This is because the standard library has `impl Borrow<str> for String`.
-
-For most types, when you want to take an owned or borrowed type, a `&T` is
-enough. But one area where `Borrow` is effective is when there’s more than one
-kind of borrowed value. This is especially true of references and slices: you
-can have both an `&T` or a `&mut T`. If we wanted to accept both of these types,
-`Borrow` is up for it:
+`Borrow` 가 효과적인 한 가지 경우는 한가지 이상의 빌린 값이 있는 경우 입니다.
+이것은 참조나 슬라이스일 때 특히 그렇습니다: `T` 혹은 `&mut T` 를 취할 수 있습니다.
+이 타입들을 받길 원한다면 `Borrow` 가 준비되어 있습니다:
 
 ```rust
 use std::borrow::Borrow;
@@ -64,12 +59,11 @@ foo(&i);
 foo(&mut i);
 ```
 
-This will print out `a is borrowed: 5` twice.
+위 코드는 `a is borrowed: 5` 를 두 번 출력할 것 입니다.
 
 # AsRef
 
-The `AsRef` trait is a conversion trait. It’s used for converting some value to
-a reference in generic code. Like this:
+`AsRef` 트레잇은 변환 트레잇 입니다. 제너릭 코드에서 어떤 값을 참조로 변환하는데 사용됩니다. 아래와 같습니다:
 
 ```rust
 let s = "Hello".to_string();
@@ -79,14 +73,10 @@ fn foo<T: AsRef<str>>(s: T) {
 }
 ```
 
-# Which should I use?
+# 어떤 것을 사용할 까요?
 
-We can see how they’re kind of the same: they both deal with owned and borrowed
-versions of some type. However, they’re a bit different.
+어떻게 같은지에 대해서는 위에서 봤습니다: 어떤 타입에 대한 소유되거나 빌린 타입을 처리합니다. 그러나 둘은 약간 다릅니다.
 
-Choose `Borrow` when you want to abstract over different kinds of borrowing, or
-when you’re building a datastructure that treats owned and borrowed values in
-equivalent ways, such as hashing and comparison.
+다른 종류의 빌림에 대해 추상화 하고 싶거나, 해싱이나 비교와 같이 소유하거나 빌린 값을 동일한 방식으로 다루는 자료구조를 만들 때 `Borrow`를 선택합니다.
 
-Choose `AsRef` when you want to convert something to a reference directly, and
-you’re writing generic code.
+제너릭 코드를 작성할 때 어떤 것을 직접 참조로 바꾸고 싶을 때 `AsRef` 를 선택합니다.
